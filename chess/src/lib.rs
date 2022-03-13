@@ -1,68 +1,32 @@
+use std::io;
 
-int setBoardToFEN(int board[], char FEN[]) 
-{
-	int p = 0;
-	for (int i = 1; i <= 64; i++)
-	{
-		switch (FEN[p])
-		{
-		case '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8':
+fn set_board_to_fen(mut board: [i8; 64], fen: [char; 64]) {
 
-			for (int j = 0; j < ((int)FEN[j])-48; j++)
-			{
-				board[j] = 0;
-				i++;
-			}
-
-		case 'r':
-			board[i] = -2;
-			break;
-		case 'n':
-			board[i] = -3;
-			break;
-		case 'b':
-			board[i] = -4;
-			break;
-		case 'q':
-			board[i] = -5;
-			break;
-		case 'k':
-			board[i] = -6;
-			break;
-		case 'p':
-			board[i] = -1;
-			break;
-
-		case 'R':
-			board[i] = 2;
-			break;
-		case 'N':
-			board[i] = 3;
-			break;
-		case 'B':
-			board[i] = 4;
-			break;
-		case 'Q':
-			board[i] = 5;
-			break;
-		case 'K':
-			board[i] = 6;
-			break;
-		case 'P':
-			board[i] = 1;
-			break;
-
-		case '/':
-			if (i % 8 != 0) {
-				return -1;
-			}
-			break;
-
-		default:
-			break;
+	for i in 1..64 {
+		match fen[i] {
+			'\0' | ' ' => break,
+			'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8' => 
+			loop_empty_squares(board, fen[i], i),
+			'p' => board[i] = -1,
+			'r' => board[i] = -2,
+			'n' => board[i] = -3,
+			'b' => board[i] = -4,
+			'q' => board[i] = -5,
+			'k' => board[i] = -6,
+			'P' => board[i] = 1,
+			'R' => board[i] = 2,
+			'N' => board[i] = 3,
+			'B' => board[i] = 4,
+			'Q' => board[i] = 5,
+			'K' => board[i] = 6,
+			'/' => continue,
+			_ => break,
 		}
-		p++;
 	}
-	return 0;
-	
+}
+
+fn loop_empty_squares(mut board: [i8; 64], laps: char, pos: usize) {
+	for i in 0..laps.to_digit(10).unwrap()-1 {
+		board[pos + i as usize] = 0;
+	}
 }
